@@ -1,0 +1,42 @@
+{
+  "name": "bsidev/bitrix-scheduler",
+  "description": "Bitrix Task Scheduling",
+  "keywords": [
+    "bitrix",
+    "scheduler",
+    "cron",
+    "task scheduler"
+  ],
+  "type": "bitrix-d7-module",
+  "license": "MIT",
+  "support": {
+    "issues": "https://github.com/bsidev/bitrix-scheduler/issues",
+    "source": "https://github.com/bsidev/bitrix-scheduler"
+  },
+  "authors": [
+    {
+      "name": "Sergey Balasov",
+      "email": "sbalasov@gmail.com"
+    }
+  ],
+  "extra": {
+    "installer-name": "bsi.scheduler"
+  },
+  "require": {
+    "php": "^7.1.3|^8.0",
+    "composer/installers": "^1.0|^2.0",
+    "peppeocchi/php-cron-scheduler": "^3.0|^4.0",
+    "symfony/console": "^4.4|^5.0|^6.0"
+  },
+  "require-dev": {
+    "roave/security-advisories": "dev-latest"
+  },
+  "bin": [
+    "scheduler"
+  ],
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "config": {
+    "sort-packages": true
+  }
+}

@@ -1,0 +1,38 @@
+#!/usr/bin/env php
+<?php
+
+use Bitrix\Main\Loader;
+use Bsi\Scheduler\Cli\ListCommand;
+use Bsi\Scheduler\Cli\RunCommand;
+use Symfony\Component\Console\Application;
+
+$documentRootFinder = static function (string $path, int $iteration = 0) use (&$documentRootFinder): ?string {
+    // Prevent infinite recursion
+    if ($iteration === 10) {
+        return null;
+    }
+
+    if (
+        file_exists($path . '/bitrix/.settings.php')
+        && is_file($path . '/bitrix/.settings.php')
+    ) {
+        return realpath($path);
+    }
+
+    return $documentRootFinder($path . '/..', ++$iteration);
+};
+
+$_SERVER['DOCUMENT_ROOT'] = $documentRootFinder(__DIR__);
+if ($_SERVER['DOCUMENT_ROOT'] === null) {
+    throw new RuntimeException('Unable to find DOCUMENT_ROOT');
+}
+
+require $_SERVER['DOCUMENT_ROOT'] . '/bitrix/modules/main/cli/bootstrap.php';
+include __DIR__ . '/install/version.php';
+
+Loader::includeModule('bsi.scheduler');
+
+$application = new Application('Bsi Task Scheduler', $arModuleVersion['VERSION'] ?? 'UNKNOWN');
+$application->add(new RunCommand());
+$application->add(new ListCommand());
+$application->run();
